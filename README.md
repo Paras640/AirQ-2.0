@@ -1,50 +1,67 @@
-# AI-Based Air Quality Deterioration Prediction System
+# AirQ 2.0
 
-## Project Overview
-This project focuses on predicting air quality deterioration using machine learning techniques. The system analyzes environmental and pollution-related factors to determine whether air quality is likely to worsen.
+AirQ predicts short-term air quality using a Flask API and a React frontend. The API serves Random Forest model predictions and live AQI data for the frontend.
 
-Air pollution has become a major environmental concern in many cities. By analyzing historical air quality and environmental data, the system aims to provide predictions that can help raise awareness about deteriorating air conditions.
+## Project structure
 
-## Objectives
-- Analyze environmental and pollution data
-- Build machine learning models to predict air quality levels
-- Detect possible air quality deterioration
-- Provide a simple interface for users to check predictions
+```text
+.
+|-- app.py                    Flask API entry point
+|-- main.py, predict.py,
+|   surroundings.py            Backend modules
+|-- model_manager.py          Model loading and fallback generation
+|-- aqi predictor.py          Model training script
+|-- exports/                  Trained models and model metadata
+|-- india_aqi_v6_2024-2025.csv
+|-- AQI_Prediction_India_1.ipynb
+|-- TEST/                     React + TypeScript + Vite frontend
+|-- requirements.txt          Python dependencies
+|-- Procfile                  Railway backend start command
+|-- .railwayignore            Keeps the frontend out of Railway builds
+`-- vercel.json               Vercel routing configuration
+```
 
-## Technologies Used
-- Python
-- Google Colab
-- Scikit-learn
-- Pandas
-- Flask / FastAPI (for backend)
-- HTML, CSS, JavaScript (for frontend)
-- GitHub for version control
+The frontend remains in `TEST/` to preserve the existing deployment configuration.
 
-## Machine Learning Algorithms
-The following algorithms will be explored in this project:
-- Random Forest
-  
+## Run locally
 
-## Dataset
-The project will use publicly available air quality datasets containing pollution indicators such as:
-- PM2.5
-- PM10
-- NO2
-- CO
-- Temperature
-- Humidity
-- Wind Speed
+### Backend
 
+Use Python 3.11.9, matching `.python-version`.
 
-## Expected Outcome
-The system will predict the air quality level and identify potential deterioration based on environmental conditions.
+```powershell
+py -3.11 -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install -r requirements.txt
+python app.py
+```
 
+The API starts at `http://localhost:5000`.
 
+### Frontend
 
+In a second terminal:
 
+```powershell
+Set-Location TEST
+npm install
+npm run dev
+```
 
+The frontend uses `http://localhost:5000` for its API by default. Set `VITE_API_URL` before starting Vite to use a different backend URL.
 
+## API endpoints
 
+- `GET /health` - backend and model status
+- `GET /live-aqi` - live AQI ticker data
+- `POST /predict` - one-hour and 24-hour AQI predictions
 
+## Frontend checks
 
+Run from `TEST/`:
 
+```powershell
+npm run type-check
+npm run lint
+npm run build
+```
